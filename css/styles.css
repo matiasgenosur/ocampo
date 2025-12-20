@@ -1,0 +1,376 @@
+/* =============================================
+   Ocampo Demoliciones - Custom Styles
+   ============================================= */
+
+/* Base Styles */
+* {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+    background-color: #C41E3A;
+    color: white;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1A1A1A;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #C41E3A;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9B1B30;
+}
+
+/* =============================================
+   Animations
+   ============================================= */
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Slide Up Animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+/* Pulse Animation for WhatsApp Button */
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+#whatsapp-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: pulse-ring 2s ease-out infinite;
+    z-index: -1;
+}
+
+/* =============================================
+   Header Styles
+   ============================================= */
+
+#header {
+    transition: all 0.3s ease;
+}
+
+#header.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Links */
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #C41E3A;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* =============================================
+   Hero Section
+   ============================================= */
+
+#inicio {
+    min-height: 100vh;
+}
+
+#inicio h1 {
+    animation: fadeIn 1s ease-out 0.2s both;
+}
+
+#inicio p {
+    animation: fadeIn 1s ease-out 0.4s both;
+}
+
+#inicio .flex {
+    animation: fadeIn 1s ease-out 0.6s both;
+}
+
+/* =============================================
+   Service Cards
+   ============================================= */
+
+.service-card {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(196, 30, 58, 0.2);
+}
+
+/* =============================================
+   Process Section
+   ============================================= */
+
+.process-step {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s ease;
+}
+
+.process-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =============================================
+   Project Cards
+   ============================================= */
+
+.project-card {
+    cursor: pointer;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26, 26, 26, 0.8), transparent);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.project-card:hover::before {
+    opacity: 0;
+}
+
+/* =============================================
+   Form Styles
+   ============================================= */
+
+#contact-form input:focus,
+#contact-form select:focus,
+#contact-form textarea:focus {
+    outline: none;
+    border-color: #C41E3A;
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+}
+
+#contact-form input::placeholder,
+#contact-form textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Select Arrow */
+#contact-form select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* Form Success State */
+#contact-form.success {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* =============================================
+   Scroll Reveal Animation
+   ============================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =============================================
+   Counter Animation
+   ============================================= */
+
+.counter {
+    display: inline-block;
+}
+
+/* =============================================
+   Mobile Menu Animation
+   ============================================= */
+
+#mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+#mobile-menu.open {
+    max-height: 400px;
+}
+
+/* =============================================
+   Loading State
+   ============================================= */
+
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =============================================
+   Responsive Adjustments
+   ============================================= */
+
+@media (max-width: 768px) {
+    #inicio h1 {
+        font-size: 2.25rem;
+        line-height: 1.2;
+    }
+
+    .service-card {
+        padding: 1.5rem;
+    }
+
+    .process-step {
+        margin-bottom: 2rem;
+    }
+
+    #whatsapp-btn span {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    #inicio {
+        padding-top: 5rem;
+    }
+
+    .project-card img {
+        height: 250px;
+    }
+}
+
+/* =============================================
+   Print Styles
+   ============================================= */
+
+@media print {
+    #header,
+    #whatsapp-btn,
+    .scroll-indicator {
+        display: none;
+    }
+
+    section {
+        page-break-inside: avoid;
+    }
+}
+
+/* =============================================
+   Accessibility
+   ============================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Styles */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #C41E3A;
+    outline-offset: 2px;
+}
+
+/* Skip to Content Link */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: #C41E3A;
+    color: white;
+    padding: 0.5rem 1rem;
+    z-index: 100;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}

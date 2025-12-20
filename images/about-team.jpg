@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="500" viewBox="0 0 600 500">
+  <rect fill="#2D2D2D" width="600" height="500"/>
+  <circle fill="#C41E3A" cx="150" cy="200" r="50" opacity="0.3"/>
+  <circle fill="#C41E3A" cx="300" cy="200" r="50" opacity="0.3"/>
+  <circle fill="#C41E3A" cx="450" cy="200" r="50" opacity="0.3"/>
+  <rect fill="#3D3D3D" x="100" y="260" width="100" height="150"/>
+  <rect fill="#3D3D3D" x="250" y="260" width="100" height="150"/>
+  <rect fill="#3D3D3D" x="400" y="260" width="100" height="150"/>
+  <text fill="#666" font-family="Arial" font-size="24" x="300" y="460" text-anchor="middle">Equipo Ocampo</text>
+</svg>

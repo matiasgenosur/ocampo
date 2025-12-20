@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect fill="#2D2D2D" width="1920" height="1080"/>
+  <rect fill="#1A1A1A" x="0" y="400" width="1920" height="680"/>
+  <rect fill="#C41E3A" x="800" y="300" width="320" height="480" opacity="0.3"/>
+  <rect fill="#3D3D3D" x="100" y="600" width="400" height="300"/>
+  <rect fill="#4D4D4D" x="550" y="500" width="300" height="400"/>
+  <circle fill="#C41E3A" cx="1400" cy="200" r="80" opacity="0.2"/>
+  <text fill="#666" font-family="Arial" font-size="48" x="960" y="560" text-anchor="middle">Hero Image - Demolition Site</text>
+</svg>
