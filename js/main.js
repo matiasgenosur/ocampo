@@ -208,22 +208,38 @@ function initContactForm() {
         submitBtn.textContent = 'Enviando...';
         submitBtn.disabled = true;
 
-        // Simulate form submission (replace with actual API call)
-        setTimeout(() => {
-            // Success state
-            form.classList.add('success');
-            showNotification('¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.', 'success');
-            form.reset();
+        // EmailJS configuration
+        const serviceID = 'service_2rwdsy2';
+        const templateRicardo = 'template_h71lsx4';
+        const templateCliente = 'template_tag9nse';
 
-            // Reset button
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+        // Send email to Ricardo
+        emailjs.send(serviceID, templateRicardo, data)
+            .then(() => {
+                // Send copy to client
+                return emailjs.send(serviceID, templateCliente, data);
+            })
+            .then(() => {
+                // Success state
+                form.classList.add('success');
+                showNotification('¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.', 'success');
+                form.reset();
 
-            // Remove success class after animation
-            setTimeout(() => {
-                form.classList.remove('success');
-            }, 3000);
-        }, 1500);
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+
+                // Remove success class after animation
+                setTimeout(() => {
+                    form.classList.remove('success');
+                }, 3000);
+            })
+            .catch((error) => {
+                console.error('Error al enviar:', error);
+                showNotification('Error al enviar el mensaje. Por favor intenta nuevamente.', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
     });
 }
 
