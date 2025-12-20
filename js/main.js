@@ -209,7 +209,7 @@ function initContactForm() {
         submitBtn.disabled = true;
 
         // EmailJS configuration
-        const serviceID = 'service_2rwdsy2';
+        const serviceID = 'service_jt61vpd';
         const templateRicardo = 'template_h71lsx4';
         const templateCliente = 'template_tag9nse';
 
