@@ -68,12 +68,12 @@ ocampo/
 
 ### 2. Hero
 - Título: "Expertos en Demolición Industrial y Comercial"
-- Badge: "+20 Años de Experiencia"
+- Badge: "+10 Años de Experiencia"
 - CTAs: "Solicitar Cotización" y "Ver Servicios"
 
 ### 3. Estadísticas
 - +500 Proyectos Realizados
-- +20 Años de Experiencia
+- +10 Años de Experiencia
 - 100% Clientes Satisfechos
 - 0 Accidentes Laborales
 
