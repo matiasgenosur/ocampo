@@ -235,8 +235,23 @@ function initContactForm() {
                 }, 3000);
             })
             .catch((error) => {
-                console.error('Error al enviar:', error);
-                showNotification('Error al enviar el mensaje. Por favor intenta nuevamente.', 'error');
+                console.error('Error detallado al enviar:', error);
+                console.error('Error status:', error.status);
+                console.error('Error text:', error.text);
+
+                let errorMessage = 'Error al enviar el mensaje. ';
+
+                if (error.status === 401) {
+                    errorMessage += 'Error de autenticación con EmailJS.';
+                } else if (error.status === 404) {
+                    errorMessage += 'Template no encontrado.';
+                } else if (error.text) {
+                    errorMessage += error.text;
+                } else {
+                    errorMessage += 'Por favor intenta nuevamente.';
+                }
+
+                showNotification(errorMessage, 'error');
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             });
