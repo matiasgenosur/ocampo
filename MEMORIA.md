@@ -9,7 +9,7 @@
 ---
 
 ## Contacto
-- **Teléfono/WhatsApp:** +56 9 5901 8142
+- **Teléfono/WhatsApp:** +56 9 2855 3089
 - **Email público:** contacto@ocampo.cl
 - **Email formulario (destino):** ricardo@ocampo.cl
 
@@ -220,7 +220,7 @@ Para descargar: `curl -L "https://drive.google.com/uc?export=download&id=ID_AQUI
 ## Historial de Cambios Importantes
 1. Sitio inicial creado con todas las secciones
 2. Logo oficial integrado
-3. Teléfono/WhatsApp: +56 9 5901 8142
+3. Teléfono/WhatsApp: +56 9 2855 3089
 4. Email: contacto@ocampo.cl
 5. EmailJS configurado para formulario
 6. Favicon creado desde logo
