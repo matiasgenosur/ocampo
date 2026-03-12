@@ -35,6 +35,7 @@
 ```
 ocampo/
 ├── index.html              # Página principal (single page)
+├── gracias.html            # Página de agradecimiento (thank you page)
 ├── css/
 │   └── styles.css          # Estilos personalizados
 ├── js/
@@ -206,6 +207,32 @@ Para descargar: `curl -L "https://drive.google.com/uc?export=download&id=ID_AQUI
 
 ---
 
+## Google Ads Conversion Tracking
+
+### Página de Agradecimiento (Thank You Page)
+- **URL:** https://ocampo.cl/gracias.html
+- **Propósito:** Tracking de conversiones para Google Ads
+- **Trigger:** Se muestra automáticamente después de enviar el formulario de contacto
+
+### Configuración en Google Ads:
+1. Ve a Google Ads → Herramientas → Medición → Conversiones
+2. Crea una nueva conversión de tipo "Visita a página web"
+3. Usa la URL: `https://ocampo.cl/gracias.html`
+4. Categoría: "Envío de formulario de contacto"
+5. Valor: Puedes asignar un valor estimado por lead
+
+### Alternativa - Código de Conversión:
+Si prefieres usar el código de conversión de Google Ads directamente:
+1. Copia el código de seguimiento de conversión desde Google Ads
+2. Pégalo en `gracias.html` en la sección marcada como:
+   ```html
+   <!-- Google Ads Conversion Tracking -->
+   <script>
+       // Google Ads conversion tracking will be added here
+   ```
+
+---
+
 ## Pendientes / Mejoras Futuras
 - [ ] Agregar foto hero real (actualmente placeholder)
 - [ ] Configurar Google Analytics
@@ -225,3 +252,4 @@ Para descargar: `curl -L "https://drive.google.com/uc?export=download&id=ID_AQUI
 5. EmailJS configurado para formulario
 6. Favicon creado desde logo
 7. Fotos actualizadas: equipo, proyectos (1-6)
+8. Página de agradecimiento (gracias.html) creada para tracking de Google Ads

@@ -202,6 +202,13 @@ function initContactForm() {
             return;
         }
 
+        // Verificar que EmailJS esté disponible
+        if (typeof emailjs === 'undefined') {
+            showNotification('Error: EmailJS no está cargado. Por favor recarga la página.', 'error');
+            console.error('EmailJS no está disponible');
+            return;
+        }
+
         // Show loading state
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
@@ -213,6 +220,10 @@ function initContactForm() {
         const templateRicardo = 'template_h71lsx4';
         const templateCliente = 'template_tag9nse';
 
+        console.log('Enviando email con datos:', data);
+        console.log('Service ID:', serviceID);
+        console.log('Template Ricardo:', templateRicardo);
+
         // Send email to Ricardo
         emailjs.send(serviceID, templateRicardo, data)
             .then(() => {
@@ -220,19 +231,13 @@ function initContactForm() {
                 return emailjs.send(serviceID, templateCliente, data);
             })
             .then(() => {
-                // Success state
-                form.classList.add('success');
-                showNotification('¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.', 'success');
+                // Success state - redirect to thank you page
                 form.reset();
 
-                // Reset button
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-
-                // Remove success class after animation
+                // Redirect to thank you page after a short delay
                 setTimeout(() => {
-                    form.classList.remove('success');
-                }, 3000);
+                    window.location.href = 'gracias.html';
+                }, 500);
             })
             .catch((error) => {
                 console.error('Error detallado al enviar:', error);
