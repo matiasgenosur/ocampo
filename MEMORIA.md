@@ -172,11 +172,15 @@ Los templates de EmailJS deben usar estas variables exactas:
 ## Clases Tailwind del Logo (Header)
 ```html
 <!-- Header container -->
-<div class="flex items-center justify-between h-32 md:h-44">
+<div class="flex items-center justify-between h-20 md:h-24">
 
 <!-- Logo imagen -->
-<img src="images/logo.png" alt="Ocampo Demoliciones" class="h-28 md:h-40 py-2">
+<img src="images/logo.png" alt="Ocampo Demoliciones" class="h-14 md:h-20 py-2">
 ```
+
+**Tamaños actuales:**
+- Móvil: Logo 56px (h-14), Header 80px (h-20)
+- Desktop: Logo 80px (h-20), Header 96px (h-24)
 
 ---
 
