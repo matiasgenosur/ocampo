@@ -34,12 +34,19 @@
 ## Estructura del Proyecto
 ```
 ocampo/
-├── index.html              # Página principal (single page)
+├── index.html              # Página principal (home)
 ├── gracias.html            # Página de agradecimiento (thank you page)
+├── retiro-asbesto.html     # Servicio: Retiro de Asbesto
+├── corte-diamantado.html   # Servicio: Corte Diamantado
+├── movimiento-tierra.html  # Servicio: Movimiento de Tierra
+├── demoliciones.html       # Servicio: Demoliciones
+├── estructuras-metalicas.html  # Servicio: Estructuras Metálicas
+├── cierres-perimetrales.html   # Servicio: Cierres Perimetrales
 ├── css/
 │   └── styles.css          # Estilos personalizados
 ├── js/
-│   └── main.js             # JavaScript (menú, formulario, animaciones)
+│   ├── main.js             # JavaScript principal (menú, formulario, animaciones)
+│   └── contact-form-component.js  # Componente reutilizable de formulario
 └── images/
     ├── logo.png            # Logo header
     ├── logo-white.png      # Logo footer
@@ -237,14 +244,69 @@ Si prefieres usar el código de conversión de Google Ads directamente:
 
 ---
 
+---
+
+## Páginas de Servicios (SEO)
+
+### Estructura Multi-página para Google Ads
+Cada servicio tiene su propia página dedicada con:
+- **URL única y descriptiva** (ej: /retiro-asbesto.html)
+- **Meta tags optimizados** por servicio
+- **Schema.org JSON-LD** para mejor indexación
+- **Contenido detallado** sobre el servicio específico
+- **Formulario de contacto** integrado (componente reutilizable)
+- **Google Ads tracking** en todas las páginas
+
+### Lista de Páginas de Servicios:
+1. **retiro-asbesto.html** - Retiro de Asbesto Certificado
+   - Keywords: retiro asbesto, retiro asbesto certificado, eliminación asbesto
+   - Normativas: D.S. 594, Autorización SEREMI
+
+2. **corte-diamantado.html** - Corte con Disco e Hilo Diamantado
+   - Keywords: corte diamantado, corte disco diamantado, corte hormigón
+   - Tipos: Disco y Hilo diamantado
+
+3. **movimiento-tierra.html** - Movimiento de Tierra y Excavación
+   - Keywords: movimiento tierra, excavación, excavación masiva
+   - Servicios: Excavación masiva, nivelación, terraplenado
+
+4. **demoliciones.html** - Demoliciones Industriales y Comerciales
+   - Keywords: demoliciones, demolición industrial, demolición edificios
+   - Tipos: Total, selectiva, controlada
+
+5. **estructuras-metalicas.html** - Demolición de Estructuras Metálicas
+   - Keywords: demolición estructuras metálicas, demolición galpones
+   - Especialidad: Desmontaje y recuperación de materiales
+
+6. **cierres-perimetrales.html** - Cierres Perimetrales y Señalización
+   - Keywords: cierres perimetrales, cierre obra, señalización
+   - Tipos: Metálicos, malla, sólidos
+
+### Componente de Formulario Reutilizable
+**Archivo:** `js/contact-form-component.js`
+
+**Uso en páginas:**
+```html
+<div id="contact-form-container"></div>
+<script src="js/contact-form-component.js"></script>
+```
+
+**Beneficios:**
+- Un solo archivo para mantener
+- Cambios se propagan automáticamente a todas las páginas
+- Consistencia en diseño y funcionalidad
+
+---
+
 ## Pendientes / Mejoras Futuras
 - [ ] Agregar foto hero real (actualmente placeholder)
-- [ ] Configurar Google Analytics
 - [ ] Configurar Google Search Console
 - [ ] Actualizar proyectos 2, 4, 6 con información real
 - [ ] Agregar links reales a redes sociales
 - [ ] Crear página de política de privacidad
 - [ ] Crear página de términos de servicio
+- [ ] Crear sitemap.xml para SEO
+- [ ] Implementar breadcrumbs en páginas de servicios
 
 ---
 
@@ -257,3 +319,5 @@ Si prefieres usar el código de conversión de Google Ads directamente:
 6. Favicon creado desde logo
 7. Fotos actualizadas: equipo, proyectos (1-6)
 8. Página de agradecimiento (gracias.html) creada para tracking de Google Ads
+9. Estructura multi-página para SEO: 6 páginas de servicios individuales
+10. Componente de formulario reutilizable (contact-form-component.js)
