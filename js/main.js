@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all components
     initMobileMenu();
+    initMobileServicesDropdown();
     initSmoothScroll();
     initHeaderScroll();
     initScrollReveal();
@@ -48,6 +49,29 @@ function initMobileMenu() {
             mobileMenu.classList.add('hidden');
             menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
         });
+    });
+}
+
+/**
+ * Mobile Services Dropdown
+ */
+function initMobileServicesDropdown() {
+    const servicesBtn = document.getElementById('mobile-services-btn');
+    const servicesMenu = document.getElementById('mobile-services-menu');
+    const servicesIcon = document.getElementById('mobile-services-icon');
+
+    if (!servicesBtn || !servicesMenu) return;
+
+    servicesBtn.addEventListener('click', function() {
+        const isOpen = !servicesMenu.classList.contains('hidden');
+
+        if (isOpen) {
+            servicesMenu.classList.add('hidden');
+            servicesIcon.classList.remove('rotate-180');
+        } else {
+            servicesMenu.classList.remove('hidden');
+            servicesIcon.classList.add('rotate-180');
+        }
     });
 }
 

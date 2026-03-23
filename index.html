@@ -76,7 +76,27 @@
                 <!-- Desktop Navigation -->
                 <div class="hidden lg:flex items-center space-x-8">
                     <a href="#inicio" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors">Inicio</a>
-                    <a href="#servicios" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors">Servicios</a>
+
+                    <!-- Servicios Dropdown -->
+                    <div class="relative group">
+                        <button class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors flex items-center">
+                            Servicios
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div class="py-2">
+                                <a href="demoliciones.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-ocampo-red hover:text-white transition-colors">Demoliciones</a>
+                                <a href="retiro-asbesto.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-ocampo-red hover:text-white transition-colors">Retiro de Asbesto</a>
+                                <a href="corte-diamantado.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-ocampo-red hover:text-white transition-colors">Corte Diamantado</a>
+                                <a href="movimiento-tierra.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-ocampo-red hover:text-white transition-colors">Movimiento de Tierra</a>
+                                <a href="estructuras-metalicas.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-ocampo-red hover:text-white transition-colors">Estructuras Metálicas</a>
+                                <a href="cierres-perimetrales.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-ocampo-red hover:text-white transition-colors">Cierres Perimetrales</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="#proceso" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors">Proceso</a>
                     <a href="#proyectos" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors">Proyectos</a>
                     <a href="#nosotros" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors">Nosotros</a>
@@ -97,7 +117,25 @@
             <div id="mobile-menu" class="lg:hidden hidden pb-6">
                 <div class="flex flex-col space-y-4">
                     <a href="#inicio" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors py-2">Inicio</a>
-                    <a href="#servicios" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors py-2">Servicios</a>
+
+                    <!-- Servicios Mobile Dropdown -->
+                    <div>
+                        <button id="mobile-services-btn" class="w-full text-left font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors py-2 flex items-center justify-between">
+                            Servicios
+                            <svg class="w-4 h-4 transform transition-transform" id="mobile-services-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="mobile-services-menu" class="hidden pl-4 mt-2 space-y-2">
+                            <a href="demoliciones.html" class="block py-2 text-sm text-gray-700 hover:text-ocampo-red">Demoliciones</a>
+                            <a href="retiro-asbesto.html" class="block py-2 text-sm text-gray-700 hover:text-ocampo-red">Retiro de Asbesto</a>
+                            <a href="corte-diamantado.html" class="block py-2 text-sm text-gray-700 hover:text-ocampo-red">Corte Diamantado</a>
+                            <a href="movimiento-tierra.html" class="block py-2 text-sm text-gray-700 hover:text-ocampo-red">Movimiento de Tierra</a>
+                            <a href="estructuras-metalicas.html" class="block py-2 text-sm text-gray-700 hover:text-ocampo-red">Estructuras Metálicas</a>
+                            <a href="cierres-perimetrales.html" class="block py-2 text-sm text-gray-700 hover:text-ocampo-red">Cierres Perimetrales</a>
+                        </div>
+                    </div>
+
                     <a href="#proceso" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors py-2">Proceso</a>
                     <a href="#proyectos" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors py-2">Proyectos</a>
                     <a href="#nosotros" class="nav-link font-heading font-semibold text-ocampo-black hover:text-ocampo-red transition-colors py-2">Nosotros</a>
@@ -709,11 +747,12 @@
                 <div>
                     <h4 class="font-heading font-bold text-white mb-4">Servicios</h4>
                     <ul class="space-y-2">
-                        <li><a href="#servicios" class="text-gray-400 hover:text-ocampo-red transition-colors">Demoliciones</a></li>
-                        <li><a href="#servicios" class="text-gray-400 hover:text-ocampo-red transition-colors">Estructuras Metálicas</a></li>
-                        <li><a href="#servicios" class="text-gray-400 hover:text-ocampo-red transition-colors">Movimientos de Tierra</a></li>
-                        <li><a href="#servicios" class="text-gray-400 hover:text-ocampo-red transition-colors">Corte Diamantado</a></li>
-                        <li><a href="#servicios" class="text-gray-400 hover:text-ocampo-red transition-colors">Retiro de Asbesto</a></li>
+                        <li><a href="demoliciones.html" class="text-gray-400 hover:text-ocampo-red transition-colors">Demoliciones</a></li>
+                        <li><a href="retiro-asbesto.html" class="text-gray-400 hover:text-ocampo-red transition-colors">Retiro de Asbesto</a></li>
+                        <li><a href="corte-diamantado.html" class="text-gray-400 hover:text-ocampo-red transition-colors">Corte Diamantado</a></li>
+                        <li><a href="movimiento-tierra.html" class="text-gray-400 hover:text-ocampo-red transition-colors">Movimiento de Tierra</a></li>
+                        <li><a href="estructuras-metalicas.html" class="text-gray-400 hover:text-ocampo-red transition-colors">Estructuras Metálicas</a></li>
+                        <li><a href="cierres-perimetrales.html" class="text-gray-400 hover:text-ocampo-red transition-colors">Cierres Perimetrales</a></li>
                     </ul>
                 </div>
             </div>
