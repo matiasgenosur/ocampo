@@ -36,12 +36,13 @@
 ocampo/
 ├── index.html              # Página principal (home)
 ├── gracias.html            # Página de agradecimiento (thank you page)
-├── retiro-asbesto.html     # Servicio: Retiro de Asbesto
-├── corte-diamantado.html   # Servicio: Corte Diamantado
-├── movimiento-tierra.html  # Servicio: Movimiento de Tierra
-├── demoliciones.html       # Servicio: Demoliciones
-├── estructuras-metalicas.html  # Servicio: Estructuras Metálicas
-├── cierres-perimetrales.html   # Servicio: Cierres Perimetrales
+├── servicios/              # Carpeta de servicios (SEO-friendly URLs)
+│   ├── retiro-asbesto.html         # Servicio: Retiro de Asbesto
+│   ├── corte-diamantado.html       # Servicio: Corte Diamantado
+│   ├── movimiento-tierra.html      # Servicio: Movimiento de Tierra
+│   ├── demoliciones.html           # Servicio: Demoliciones
+│   ├── estructuras-metalicas.html  # Servicio: Estructuras Metálicas
+│   └── cierres-perimetrales.html   # Servicio: Cierres Perimetrales
 ├── css/
 │   └── styles.css          # Estilos personalizados
 ├── js/
@@ -258,27 +259,33 @@ Cada servicio tiene su propia página dedicada con:
 - **Google Ads tracking** en todas las páginas
 
 ### Lista de Páginas de Servicios:
-1. **retiro-asbesto.html** - Retiro de Asbesto Certificado
+1. **servicios/retiro-asbesto.html** - Retiro de Asbesto Certificado
+   - URL: https://ocampo.cl/servicios/retiro-asbesto.html
    - Keywords: retiro asbesto, retiro asbesto certificado, eliminación asbesto
-   - Normativas: D.S. 594, Autorización SEREMI
+   - Normativas: D.S. 594, Cumplimiento SEREMI
 
-2. **corte-diamantado.html** - Corte con Disco e Hilo Diamantado
+2. **servicios/corte-diamantado.html** - Corte con Disco e Hilo Diamantado
+   - URL: https://ocampo.cl/servicios/corte-diamantado.html
    - Keywords: corte diamantado, corte disco diamantado, corte hormigón
    - Tipos: Disco y Hilo diamantado
 
-3. **movimiento-tierra.html** - Movimiento de Tierra y Excavación
+3. **servicios/movimiento-tierra.html** - Movimiento de Tierra y Excavación
+   - URL: https://ocampo.cl/servicios/movimiento-tierra.html
    - Keywords: movimiento tierra, excavación, excavación masiva
    - Servicios: Excavación masiva, nivelación, terraplenado
 
-4. **demoliciones.html** - Demoliciones Industriales y Comerciales
+4. **servicios/demoliciones.html** - Demoliciones Industriales y Comerciales
+   - URL: https://ocampo.cl/servicios/demoliciones.html
    - Keywords: demoliciones, demolición industrial, demolición edificios
    - Tipos: Total, selectiva, controlada
 
-5. **estructuras-metalicas.html** - Demolición de Estructuras Metálicas
+5. **servicios/estructuras-metalicas.html** - Demolición de Estructuras Metálicas
+   - URL: https://ocampo.cl/servicios/estructuras-metalicas.html
    - Keywords: demolición estructuras metálicas, demolición galpones
    - Especialidad: Desmontaje y recuperación de materiales
 
-6. **cierres-perimetrales.html** - Cierres Perimetrales y Señalización
+6. **servicios/cierres-perimetrales.html** - Cierres Perimetrales y Señalización
+   - URL: https://ocampo.cl/servicios/cierres-perimetrales.html
    - Keywords: cierres perimetrales, cierre obra, señalización
    - Tipos: Metálicos, malla, sólidos
 
@@ -321,3 +328,4 @@ Cada servicio tiene su propia página dedicada con:
 8. Página de agradecimiento (gracias.html) creada para tracking de Google Ads
 9. Estructura multi-página para SEO: 6 páginas de servicios individuales
 10. Componente de formulario reutilizable (contact-form-component.js)
+11. Reorganización de URLs: Servicios movidos a carpeta /servicios/ para mejor SEO
