@@ -260,7 +260,7 @@ function initContactForm() {
 
                 // Redirect to thank you page after a short delay
                 setTimeout(() => {
-                    window.location.href = 'gracias.html';
+                    window.location.href = '/gracias.html';
                 }, 500);
             })
             .catch((error) => {
