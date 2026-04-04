@@ -226,61 +226,30 @@ function initContactForm() {
             return;
         }
 
-        // Verificar que EmailJS esté disponible
-        if (typeof emailjs === 'undefined') {
-            showNotification('Error: EmailJS no está cargado. Por favor recarga la página.', 'error');
-            console.error('EmailJS no está disponible');
-            return;
-        }
-
         // Show loading state
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Enviando...';
         submitBtn.disabled = true;
 
-        // EmailJS configuration
-        const serviceID = 'service_jt61vpd';
-        const templateRicardo = 'template_h71lsx4';
-        const templateCliente = 'template_tag9nse';
-
-        console.log('Enviando email con datos:', data);
-        console.log('Service ID:', serviceID);
-        console.log('Template Ricardo:', templateRicardo);
-
-        // Send email to Ricardo
-        emailjs.send(serviceID, templateRicardo, data)
-            .then(() => {
-                // Send copy to client
-                return emailjs.send(serviceID, templateCliente, data);
+        fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        })
+            .then(async (response) => {
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Error al enviar');
+                return result;
             })
             .then(() => {
-                // Success state - redirect to thank you page
                 form.reset();
-
-                // Redirect to thank you page after a short delay
                 setTimeout(() => {
                     window.location.href = '/gracias.html';
                 }, 500);
             })
             .catch((error) => {
-                console.error('Error detallado al enviar:', error);
-                console.error('Error status:', error.status);
-                console.error('Error text:', error.text);
-
-                let errorMessage = 'Error al enviar el mensaje. ';
-
-                if (error.status === 401) {
-                    errorMessage += 'Error de autenticación con EmailJS.';
-                } else if (error.status === 404) {
-                    errorMessage += 'Template no encontrado.';
-                } else if (error.text) {
-                    errorMessage += error.text;
-                } else {
-                    errorMessage += 'Por favor intenta nuevamente.';
-                }
-
-                showNotification(errorMessage, 'error');
+                showNotification(error.message || 'Error al enviar el mensaje. Por favor intenta nuevamente.', 'error');
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             });
