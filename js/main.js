@@ -454,16 +454,12 @@ function initLazyLoad() {
  * Track WhatsApp Clicks (for analytics)
  */
 document.addEventListener('click', function(e) {
-    const whatsappBtn = e.target.closest('#whatsapp-btn');
+    const whatsappLink = e.target.closest('a[href*="wa.me"], #whatsapp-btn');
 
-    if (whatsappBtn) {
-        // Track event (Google Analytics example)
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'click', {
-                'event_category': 'WhatsApp',
-                'event_label': 'Floating Button Click'
-            });
-        }
+    if (whatsappLink && typeof gtag !== 'undefined') {
+        gtag('event', 'conversion', {
+            'send_to': 'AW-18011992452/i-ydCJjL7ZUcEITj5IxD'
+        });
     }
 });
 
