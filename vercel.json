@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/", "destination": "/admin/index.html" },
+    { "source": "/admin/leads", "destination": "/admin/index.html" },
+    { "source": "/admin/leads/:path*", "destination": "/admin/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/webhook/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
+  ]
+}

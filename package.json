@@ -2,6 +2,7 @@
   "name": "ocampo-demoliciones",
   "version": "1.0.0",
   "dependencies": {
+    "@supabase/supabase-js": "^2.104.1",
     "googleapis": "^144.0.0"
   },
   "devDependencies": {

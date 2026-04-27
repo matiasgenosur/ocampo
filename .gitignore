@@ -3,3 +3,4 @@ node_modules/
 google-ads.yaml
 get_gmail_token.py
 crear_campana_asbesto.py
+.vercel

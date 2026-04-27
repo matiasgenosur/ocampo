@@ -1,28 +1,4 @@
-const { google } = require('googleapis');
-
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GMAIL_CLIENT_ID,
-  process.env.GMAIL_CLIENT_SECRET,
-  'https://developers.google.com/oauthplayground'
-);
-
-oauth2Client.setCredentials({
-  refresh_token: process.env.GMAIL_REFRESH_TOKEN,
-});
-
-const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
-
-function buildEmail(to, subject, htmlBody) {
-  const lines = [
-    `To: ${to}`,
-    `Subject: =?UTF-8?B?${Buffer.from(subject).toString('base64')}?=`,
-    'MIME-Version: 1.0',
-    'Content-Type: text/html; charset=UTF-8',
-    '',
-    htmlBody,
-  ];
-  return Buffer.from(lines.join('\r\n')).toString('base64url');
-}
+const { sendEmail } = require('../lib/email');
 
 module.exports = async function handler(req, res) {
   // CORS
@@ -42,11 +18,7 @@ module.exports = async function handler(req, res) {
   const empresaTexto = empresa ? empresa : 'No especificada';
   const fechaEnvio = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
 
-  // Email a Ricardo
-  const emailRicardo = buildEmail(
-    'ricardo@ocampo.cl',
-    `Nueva Cotización: ${servicio} - ${nombre}`,
-    `
+  const emailRicardoHtml = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1A1A1A;">
       <div style="background: #C41E3A; padding: 24px 32px;">
         <h1 style="color: white; margin: 0; font-size: 22px;">Nueva Solicitud de Cotización</h1>
@@ -71,14 +43,9 @@ module.exports = async function handler(req, res) {
         </div>
       </div>
     </div>
-    `
-  );
+  `;
 
-  // Email de confirmación al cliente
-  const emailCliente = buildEmail(
-    email,
-    'Recibimos tu solicitud - Ocampo Demoliciones',
-    `
+  const emailClienteHtml = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1A1A1A;">
       <div style="background: #C41E3A; padding: 24px 32px;">
         <h1 style="color: white; margin: 0; font-size: 22px;">Ocampo Demoliciones</h1>
@@ -95,21 +62,20 @@ module.exports = async function handler(req, res) {
         </div>
         <p style="line-height: 1.6; color: #444;">Si tienes alguna urgencia, puedes contactarnos directamente:</p>
         <ul style="color: #444; line-height: 2;">
-          <li>📞 <a href="tel:+56928553089" style="color: #C41E3A;">+56 9 2855 3089</a></li>
-          <li>💬 <a href="https://wa.me/56928553089" style="color: #C41E3A;">WhatsApp</a></li>
-          <li>✉️ <a href="mailto:contacto@ocampo.cl" style="color: #C41E3A;">contacto@ocampo.cl</a></li>
+          <li><a href="tel:+56928553089" style="color: #C41E3A;">+56 9 2855 3089</a></li>
+          <li><a href="https://wa.me/56928553089" style="color: #C41E3A;">WhatsApp</a></li>
+          <li><a href="mailto:contacto@ocampo.cl" style="color: #C41E3A;">contacto@ocampo.cl</a></li>
         </ul>
       </div>
       <div style="background: #1A1A1A; padding: 20px 32px; text-align: center;">
-        <p style="color: #888; font-size: 13px; margin: 0;">© 2025 Ocampo Demoliciones · Santiago, Chile</p>
+        <p style="color: #888; font-size: 13px; margin: 0;">&copy; 2025 Ocampo Demoliciones &middot; Santiago, Chile</p>
       </div>
     </div>
-    `
-  );
+  `;
 
   try {
-    await gmail.users.messages.send({ userId: 'me', requestBody: { raw: emailRicardo } });
-    await gmail.users.messages.send({ userId: 'me', requestBody: { raw: emailCliente } });
+    await sendEmail('ricardo@ocampo.cl', `Nueva Cotización: ${servicio} - ${nombre}`, emailRicardoHtml);
+    await sendEmail(email, 'Recibimos tu solicitud - Ocampo Demoliciones', emailClienteHtml);
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Error enviando email:', error.message);

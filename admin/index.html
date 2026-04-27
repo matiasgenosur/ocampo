@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Leads - Ocampo Demoliciones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ocampo: '#C41E3A',
+            dark: '#1A1A1A',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .badge-nuevo { background: #DBEAFE; color: #1E40AF; }
+    .badge-contactado { background: #FEF3C7; color: #92400E; }
+    .badge-cotizado { background: #FFEDD5; color: #9A3412; }
+    .badge-cerrado { background: #D1FAE5; color: #065F46; }
+    .badge-descartado { background: #FEE2E2; color: #991B1B; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Login -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-dark">Ocampo Admin</h1>
+        <p class="text-gray-500 text-sm mt-1">Panel de leads Google Ads</p>
+      </div>
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+          <input type="text" id="login-user" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-ocampo focus:border-transparent outline-none">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+          <input type="password" id="login-pass" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-ocampo focus:border-transparent outline-none">
+        </div>
+        <div id="login-error" class="text-red-600 text-sm hidden"></div>
+        <button type="submit" class="w-full bg-ocampo text-white font-bold py-2.5 rounded-lg hover:bg-red-700 transition">
+          Ingresar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden">
+    <!-- Header -->
+    <header class="bg-dark text-white px-6 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-bold">Ocampo Leads</h1>
+        <p class="text-gray-400 text-xs">Panel administrativo</p>
+      </div>
+      <button id="btn-logout" class="text-sm text-gray-400 hover:text-white transition">Cerrar sesión</button>
+    </header>
+
+    <!-- Stats -->
+    <div class="px-6 py-4 grid grid-cols-2 md:grid-cols-5 gap-3" id="stats-bar">
+      <div class="bg-white rounded-lg p-3 shadow-sm text-center">
+        <div class="text-2xl font-bold text-dark" id="stat-total">-</div>
+        <div class="text-xs text-gray-500">Total</div>
+      </div>
+      <div class="bg-white rounded-lg p-3 shadow-sm text-center">
+        <div class="text-2xl font-bold text-blue-600" id="stat-nuevo">-</div>
+        <div class="text-xs text-gray-500">Nuevos</div>
+      </div>
+      <div class="bg-white rounded-lg p-3 shadow-sm text-center">
+        <div class="text-2xl font-bold text-yellow-600" id="stat-contactado">-</div>
+        <div class="text-xs text-gray-500">Contactados</div>
+      </div>
+      <div class="bg-white rounded-lg p-3 shadow-sm text-center">
+        <div class="text-2xl font-bold text-orange-600" id="stat-cotizado">-</div>
+        <div class="text-xs text-gray-500">Cotizados</div>
+      </div>
+      <div class="bg-white rounded-lg p-3 shadow-sm text-center">
+        <div class="text-2xl font-bold text-green-600" id="stat-cerrado">-</div>
+        <div class="text-xs text-gray-500">Cerrados</div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="px-6 py-3">
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">Estado</label>
+            <select id="filter-estado" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option value="">Todos</option>
+              <option value="nuevo">Nuevo</option>
+              <option value="contactado">Contactado</option>
+              <option value="cotizado">Cotizado</option>
+              <option value="cerrado">Cerrado</option>
+              <option value="descartado">Descartado</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">Desde</label>
+            <input type="date" id="filter-from" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">Hasta</label>
+            <input type="date" id="filter-to" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">Buscar</label>
+            <input type="text" id="filter-search" placeholder="Nombre, email, teléfono..." class="border border-gray-300 rounded-lg px-3 py-2 text-sm w-52">
+          </div>
+          <button id="btn-filter" class="bg-ocampo text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition">Filtrar</button>
+          <button id="btn-clear" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition">Limpiar</button>
+          <button id="btn-export" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition ml-auto">Exportar CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="px-6 py-3">
+      <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
+              <tr>
+                <th class="px-4 py-3 text-left">Fecha</th>
+                <th class="px-4 py-3 text-left">Nombre</th>
+                <th class="px-4 py-3 text-left">Email</th>
+                <th class="px-4 py-3 text-left">Teléfono</th>
+                <th class="px-4 py-3 text-left">Tipo</th>
+                <th class="px-4 py-3 text-left">Región</th>
+                <th class="px-4 py-3 text-left">Estado</th>
+                <th class="px-4 py-3 text-left">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="leads-table" class="divide-y divide-gray-100">
+              <tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Paginación -->
+        <div class="flex items-center justify-between px-4 py-3 bg-gray-50 text-sm">
+          <div id="pagination-info" class="text-gray-500"></div>
+          <div class="flex gap-2">
+            <button id="btn-prev" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50" disabled>Anterior</button>
+            <button id="btn-next" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50" disabled>Siguiente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal detalle -->
+  <div id="modal-overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div class="bg-ocampo text-white px-6 py-4 rounded-t-xl flex justify-between items-center">
+        <h2 class="font-bold text-lg">Detalle del Lead</h2>
+        <button id="modal-close" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div id="modal-body" class="p-6">
+        <!-- Contenido dinámico -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── State ───
+    const API = '/api/admin';
+    let token = localStorage.getItem('admin_token');
+    let currentPage = 1;
+    let totalPages = 1;
+
+    // ─── DOM ───
+    const $ = (sel) => document.querySelector(sel);
+    const loginScreen = $('#login-screen');
+    const dashboard = $('#dashboard');
+
+    // ─── Auth ───
+    function headers() {
+      return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+    }
+
+    async function apiFetch(url, opts = {}) {
+      const res = await fetch(url, { headers: headers(), ...opts });
+      if (res.status === 401) { logout(); throw new Error('No autorizado'); }
+      return res;
+    }
+
+    function logout() {
+      token = null;
+      localStorage.removeItem('admin_token');
+      loginScreen.classList.remove('hidden');
+      dashboard.classList.add('hidden');
+    }
+
+    async function checkAuth() {
+      if (!token) return;
+      try {
+        const res = await apiFetch(`${API}/leads?limit=1`);
+        if (res.ok) {
+          loginScreen.classList.add('hidden');
+          dashboard.classList.remove('hidden');
+          loadLeads();
+          loadStats();
+        }
+      } catch { logout(); }
+    }
+
+    // ─── Login ───
+    $('#login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = $('#login-error');
+      errEl.classList.add('hidden');
+
+      try {
+        const res = await fetch(`${API}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: $('#login-user').value,
+            password: $('#login-pass').value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error');
+
+        token = data.token;
+        localStorage.setItem('admin_token', token);
+        loginScreen.classList.add('hidden');
+        dashboard.classList.remove('hidden');
+        loadLeads();
+        loadStats();
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+      }
+    });
+
+    $('#btn-logout').addEventListener('click', logout);
+
+    // ─── Stats ───
+    async function loadStats() {
+      try {
+        const estados = ['nuevo', 'contactado', 'cotizado', 'cerrado'];
+        let total = 0;
+        for (const estado of estados) {
+          const res = await apiFetch(`${API}/leads?estado=${estado}&limit=1`);
+          const data = await res.json();
+          const count = data.total || 0;
+          total += count;
+          const el = $(`#stat-${estado}`);
+          if (el) el.textContent = count;
+        }
+        // Sumar descartados al total
+        const resDesc = await apiFetch(`${API}/leads?estado=descartado&limit=1`);
+        const descData = await resDesc.json();
+        total += descData.total || 0;
+        $('#stat-total').textContent = total;
+      } catch (err) {
+        console.error('Error cargando stats:', err);
+      }
+    }
+
+    // ─── Leads ───
+    function getFilters() {
+      const params = new URLSearchParams();
+      const estado = $('#filter-estado').value;
+      const from = $('#filter-from').value;
+      const to = $('#filter-to').value;
+      const search = $('#filter-search').value;
+      if (estado) params.set('estado', estado);
+      if (from) params.set('from', from);
+      if (to) params.set('to', to);
+      if (search) params.set('search', search);
+      params.set('page', currentPage);
+      params.set('limit', '20');
+      return params.toString();
+    }
+
+    async function loadLeads() {
+      const table = $('#leads-table');
+      table.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Cargando...</td></tr>';
+
+      try {
+        const res = await apiFetch(`${API}/leads?${getFilters()}`);
+        const data = await res.json();
+        totalPages = data.pages || 1;
+
+        if (!data.leads || data.leads.length === 0) {
+          table.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">No hay leads</td></tr>';
+        } else {
+          table.innerHTML = data.leads.map(lead => `
+            <tr class="hover:bg-gray-50 ${lead.is_test ? 'bg-yellow-50' : ''}">
+              <td class="px-4 py-3 text-gray-600 whitespace-nowrap">${formatDate(lead.fecha_recibido)}</td>
+              <td class="px-4 py-3 font-medium">${esc(lead.nombre || '-')}</td>
+              <td class="px-4 py-3">${lead.email ? `<a href="mailto:${esc(lead.email)}" class="text-ocampo hover:underline">${esc(lead.email)}</a>` : '-'}</td>
+              <td class="px-4 py-3">${lead.telefono ? `<a href="tel:${esc(lead.telefono)}" class="text-ocampo hover:underline">${esc(lead.telefono)}</a>` : '-'}</td>
+              <td class="px-4 py-3">${esc(lead.tipo_propiedad || '-')}</td>
+              <td class="px-4 py-3">${esc(lead.region || '-')}</td>
+              <td class="px-4 py-3">
+                <select data-id="${lead.id}" class="estado-select text-xs px-2 py-1 rounded-full border-0 font-medium badge-${lead.estado}" onchange="updateEstado(this)">
+                  ${['nuevo','contactado','cotizado','cerrado','descartado'].map(e =>
+                    `<option value="${e}" ${e === lead.estado ? 'selected' : ''}>${e.charAt(0).toUpperCase() + e.slice(1)}</option>`
+                  ).join('')}
+                </select>
+              </td>
+              <td class="px-4 py-3">
+                <button onclick="showDetail(${lead.id})" class="text-ocampo hover:underline text-xs font-medium">Ver detalle</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+        // Paginación
+        $('#pagination-info').textContent = `Página ${currentPage} de ${totalPages} (${data.total} leads)`;
+        $('#btn-prev').disabled = currentPage <= 1;
+        $('#btn-next').disabled = currentPage >= totalPages;
+      } catch (err) {
+        table.innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center text-red-500">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    // ─── Estado update ───
+    async function updateEstado(select) {
+      const id = select.dataset.id;
+      const estado = select.value;
+      try {
+        await apiFetch(`${API}/lead-update?id=${id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ estado }),
+        });
+        // Actualizar badge class
+        select.className = `estado-select text-xs px-2 py-1 rounded-full border-0 font-medium badge-${estado}`;
+        loadStats();
+      } catch (err) {
+        alert('Error actualizando estado: ' + err.message);
+        loadLeads();
+      }
+    }
+
+    // ─── Detail modal ───
+    async function showDetail(id) {
+      const modal = $('#modal-overlay');
+      const body = $('#modal-body');
+      modal.classList.remove('hidden');
+      body.innerHTML = '<p class="text-gray-400 text-center py-4">Cargando...</p>';
+
+      try {
+        const res = await apiFetch(`${API}/lead-detail?id=${id}`);
+        const lead = await res.json();
+
+        const fields = [
+          ['Lead ID Google', lead.lead_id_google],
+          ['Fecha recibido', formatDate(lead.fecha_recibido)],
+          ['Nombre', lead.nombre],
+          ['Email', lead.email ? `<a href="mailto:${esc(lead.email)}" class="text-ocampo">${esc(lead.email)}</a>` : null],
+          ['Teléfono', lead.telefono ? `<a href="tel:${esc(lead.telefono)}" class="text-ocampo">${esc(lead.telefono)}</a>` : null],
+          ['Tipo de propiedad', lead.tipo_propiedad],
+          ['Metros cuadrados', lead.metros_cuadrados],
+          ['Plazo', lead.plazo],
+          ['Región', lead.region],
+          ['Campaña ID', lead.campaign_id],
+          ['GCL ID', lead.gcl_id],
+          ['Estado', `<span class="badge-${lead.estado} px-2 py-0.5 rounded-full text-xs font-medium">${lead.estado}</span>`],
+          ['Test', lead.is_test ? 'Sí' : 'No'],
+        ].filter(([, v]) => v != null);
+
+        const actions = [];
+        if (lead.email) actions.push(`<a href="mailto:${esc(lead.email)}" class="inline-block bg-ocampo text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition">Email</a>`);
+        if (lead.telefono) actions.push(`<a href="tel:${esc(lead.telefono)}" class="inline-block bg-dark text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition">Llamar</a>`);
+        if (lead.telefono) actions.push(`<a href="https://wa.me/${lead.telefono.replace(/[^0-9]/g, '')}" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition">WhatsApp</a>`);
+
+        body.innerHTML = `
+          <table class="w-full text-sm">
+            ${fields.map(([label, val]) => `
+              <tr class="border-b border-gray-100">
+                <td class="py-2 pr-4 font-medium text-gray-600 w-40">${label}</td>
+                <td class="py-2">${val}</td>
+              </tr>
+            `).join('')}
+          </table>
+          ${actions.length ? `<div class="flex gap-2 mt-4">${actions.join('')}</div>` : ''}
+          <details class="mt-4">
+            <summary class="text-xs text-gray-500 cursor-pointer hover:text-gray-700">Ver payload completo (JSON)</summary>
+            <pre class="mt-2 bg-gray-100 p-3 rounded text-xs overflow-x-auto max-h-60">${esc(JSON.stringify(lead.raw_payload, null, 2))}</pre>
+          </details>
+        `;
+      } catch (err) {
+        body.innerHTML = `<p class="text-red-500 text-center py-4">Error: ${err.message}</p>`;
+      }
+    }
+
+    $('#modal-close').addEventListener('click', () => $('#modal-overlay').classList.add('hidden'));
+    $('#modal-overlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) $('#modal-overlay').classList.add('hidden');
+    });
+
+    // ─── Filtros ───
+    $('#btn-filter').addEventListener('click', () => { currentPage = 1; loadLeads(); });
+    $('#btn-clear').addEventListener('click', () => {
+      $('#filter-estado').value = '';
+      $('#filter-from').value = '';
+      $('#filter-to').value = '';
+      $('#filter-search').value = '';
+      currentPage = 1;
+      loadLeads();
+    });
+
+    // Enter en búsqueda
+    $('#filter-search').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') { currentPage = 1; loadLeads(); }
+    });
+
+    // Paginación
+    $('#btn-prev').addEventListener('click', () => { if (currentPage > 1) { currentPage--; loadLeads(); } });
+    $('#btn-next').addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; loadLeads(); } });
+
+    // Export CSV
+    $('#btn-export').addEventListener('click', () => {
+      const params = new URLSearchParams();
+      const estado = $('#filter-estado').value;
+      const from = $('#filter-from').value;
+      const to = $('#filter-to').value;
+      if (estado) params.set('estado', estado);
+      if (from) params.set('from', from);
+      if (to) params.set('to', to);
+      params.set('token', token);
+      window.open(`${API}/leads-export?${params.toString()}`, '_blank');
+    });
+
+    // ─── Helpers ───
+    function formatDate(iso) {
+      if (!iso) return '-';
+      const d = new Date(iso);
+      return d.toLocaleString('es-CL', { timeZone: 'America/Santiago', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function esc(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ─── Init ───
+    checkAuth();
+  </script>
+</body>
+</html>
