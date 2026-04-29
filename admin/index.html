@@ -61,8 +61,17 @@
         <h1 class="text-lg font-bold">Ocampo Leads</h1>
         <p class="text-gray-400 text-xs">Panel administrativo</p>
       </div>
-      <button id="btn-logout" class="text-sm text-gray-400 hover:text-white transition">Cerrar sesión</button>
+      <div class="flex items-center gap-4">
+        <div id="health-status" class="flex items-center gap-2 text-xs"></div>
+        <button id="btn-logout" class="text-sm text-gray-400 hover:text-white transition">Cerrar sesión</button>
+      </div>
     </header>
+
+    <!-- Health Alert Banner -->
+    <div id="health-alert" class="hidden bg-red-600 text-white px-6 py-3 flex items-center justify-between">
+      <span id="health-alert-msg" class="text-sm font-medium"></span>
+      <button onclick="document.getElementById('health-alert').classList.add('hidden')" class="text-white/70 hover:text-white text-lg">&times;</button>
+    </div>
 
     <!-- Stats -->
     <div class="px-6 py-4 grid grid-cols-2 md:grid-cols-5 gap-3" id="stats-bar">
@@ -208,6 +217,7 @@
           dashboard.classList.remove('hidden');
           loadLeads();
           loadStats();
+          loadHealth();
         }
       } catch { logout(); }
     }
@@ -236,6 +246,7 @@
         dashboard.classList.remove('hidden');
         loadLeads();
         loadStats();
+        loadHealth();
       } catch (err) {
         errEl.textContent = err.message;
         errEl.classList.remove('hidden');
@@ -323,6 +334,31 @@
         $('#btn-next').disabled = currentPage >= totalPages;
       } catch (err) {
         table.innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center text-red-500">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    // ─── Health check ───
+    async function loadHealth() {
+      try {
+        const res = await fetch('/api/health');
+        const data = await res.json();
+        const el = $('#health-status');
+        const alert = $('#health-alert');
+        const alertMsg = $('#health-alert-msg');
+
+        if (data.status === 'healthy') {
+          el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-green-400"></span><span class="text-green-400">Servicios OK</span>';
+          alert.classList.add('hidden');
+        } else {
+          el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-red-400 animate-pulse"></span><span class="text-red-400">Servicio caído</span>';
+          const errors = [];
+          if (data.services.gmail === 'error') errors.push('Gmail API caído' + (data.errors?.gmail ? ': ' + data.errors.gmail : ''));
+          if (data.services.supabase === 'error') errors.push('Supabase caído' + (data.errors?.supabase ? ': ' + data.errors.supabase : ''));
+          alertMsg.textContent = errors.join(' | ');
+          alert.classList.remove('hidden');
+        }
+      } catch {
+        $('#health-status').innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-gray-400"></span><span class="text-gray-400">Sin datos</span>';
       }
     }
 
