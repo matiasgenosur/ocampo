@@ -1,5 +1,5 @@
 const { getSupabase } = require('../lib/supabase');
-const { getGmail } = require('../lib/email');
+const { verifyConnection } = require('../lib/email');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -15,9 +15,9 @@ module.exports = async function handler(req, res) {
     status.errors.supabase = err.message;
   }
 
-  // Test Gmail API (getProfile, no envía email)
+  // Test Gmail SMTP (handshake, no envía email)
   try {
-    await getGmail().users.getProfile({ userId: 'me' });
+    await verifyConnection();
   } catch (err) {
     status.gmail = 'error';
     status.errors.gmail = err.message;

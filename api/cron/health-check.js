@@ -1,5 +1,5 @@
 const { getSupabase } = require('../../lib/supabase');
-const { getGmail, sendEmail } = require('../../lib/email');
+const { verifyConnection, sendEmail } = require('../../lib/email');
 
 module.exports = async function handler(req, res) {
   // Vercel Cron envía GET con header de verificación
@@ -23,9 +23,9 @@ module.exports = async function handler(req, res) {
     supabaseError = err.message;
   }
 
-  // Test Gmail API
+  // Test Gmail SMTP
   try {
-    await getGmail().users.getProfile({ userId: 'me' });
+    await verifyConnection();
   } catch (err) {
     gmailOk = false;
     gmailError = err.message;
@@ -111,9 +111,10 @@ function buildAlertHtml(problems) {
         <ul style="list-style: none; padding: 0; margin: 0;">${items}</ul>
         <div style="margin-top: 24px; padding: 16px; background: white; border-radius: 8px;">
           <p style="margin: 0; font-size: 14px; color: #666;">
-            <strong>Acción requerida:</strong> Si Gmail muestra "invalid_grant", se debe regenerar el refresh token en
-            <a href="https://developers.google.com/oauthplayground" style="color: #DC2626;">OAuth Playground</a>
-            y actualizar la variable GMAIL_REFRESH_TOKEN en Vercel.
+            <strong>Acción requerida:</strong> Si Gmail muestra error de autenticación (EAUTH / Invalid login),
+            regenerar el App Password en
+            <a href="https://myaccount.google.com/apppasswords" style="color: #DC2626;">myaccount.google.com/apppasswords</a>
+            y actualizar la variable GMAIL_APP_PASSWORD en Vercel.
           </p>
         </div>
       </div>
