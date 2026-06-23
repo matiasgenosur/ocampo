@@ -1,16 +1,4 @@
 {
-  "crons": [
-    {
-      "path": "/api/cron/health-check",
-      "schedule": "0 * * * *"
-    }
-  ],
-  "rewrites": [
-    { "source": "/admin", "destination": "/admin/index.html" },
-    { "source": "/admin/", "destination": "/admin/index.html" },
-    { "source": "/admin/leads", "destination": "/admin/index.html" },
-    { "source": "/admin/leads/:path*", "destination": "/admin/index.html" }
-  ],
   "headers": [
     {
       "source": "/api/webhook/(.*)",
