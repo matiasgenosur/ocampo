@@ -3,21 +3,30 @@ const { leadExists, appendLead } = require('../../lib/sheets');
 const { sendEmail } = require('../../lib/email');
 const { rateLimit } = require('../../lib/rate-limit');
 
-const COLUMN_MAP = {
+// Match por column_id (estándar de Google Ads + slug de custom questions)
+const ID_MAP = {
   FULL_NAME: 'nombre',
   EMAIL: 'email',
   PHONE_NUMBER: 'telefono',
+  CITY: 'region',
+  POSTAL_CODE: 'region',
+  '¿qué_tipo_de_propiedad?': 'tipo_propiedad',
+  '¿cuándo_necesitas_el_servicio?': 'plazo',
+  '¿cuántos_metros_cuadrados?': 'metros_cuadrados',
 };
 
-const CUSTOM_MAP = {
+// Fallback por column_name (algunas custom questions vienen con name en lugar de id)
+const NAME_MAP = {
   'Tipo de propiedad': 'tipo_propiedad',
   'Tipo de proyecto': 'tipo_propiedad',
   'Metros cuadrados': 'metros_cuadrados',
   'Superficie': 'metros_cuadrados',
   'Plazo': 'plazo',
+  'Cuándo necesitas el servicio': 'plazo',
   'Region': 'region',
   'Región': 'region',
   'Comuna': 'region',
+  'City': 'region',
 };
 
 function parseLeadData(payload) {
@@ -25,11 +34,10 @@ function parseLeadData(payload) {
   const columns = payload.user_column_data || payload.lead_field_data || [];
   for (const col of columns) {
     const value = col.string_value || '';
-    if (col.column_id && COLUMN_MAP[col.column_id]) {
-      fields[COLUMN_MAP[col.column_id]] = value;
-    }
-    if (col.column_name && CUSTOM_MAP[col.column_name]) {
-      fields[CUSTOM_MAP[col.column_name]] = value;
+    if (col.column_id && ID_MAP[col.column_id]) {
+      fields[ID_MAP[col.column_id]] = value;
+    } else if (col.column_name && NAME_MAP[col.column_name]) {
+      fields[NAME_MAP[col.column_name]] = value;
     }
   }
   return fields;
