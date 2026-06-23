@@ -1,16 +1,14 @@
 const crypto = require('crypto');
-const { getSupabase } = require('../../lib/supabase');
+const { getLeadsSheet, leadExists } = require('../../lib/sheets');
 const { sendEmail } = require('../../lib/email');
 const { rateLimit } = require('../../lib/rate-limit');
 
-// Mapeo de column_id estándar de Google Ads
 const COLUMN_MAP = {
   FULL_NAME: 'nombre',
   EMAIL: 'email',
   PHONE_NUMBER: 'telefono',
 };
 
-// Mapeo de custom questions por column_name (ajustar según config Google Ads)
 const CUSTOM_MAP = {
   'Tipo de propiedad': 'tipo_propiedad',
   'Tipo de proyecto': 'tipo_propiedad',
@@ -25,24 +23,20 @@ const CUSTOM_MAP = {
 function parseLeadData(payload) {
   const fields = {};
   const columns = payload.user_column_data || payload.lead_field_data || [];
-
   for (const col of columns) {
     const value = col.string_value || '';
-    // Primero buscar por column_id estándar
     if (col.column_id && COLUMN_MAP[col.column_id]) {
       fields[COLUMN_MAP[col.column_id]] = value;
     }
-    // Luego por column_name para custom questions
     if (col.column_name && CUSTOM_MAP[col.column_name]) {
       fields[CUSTOM_MAP[col.column_name]] = value;
     }
   }
-
   return fields;
 }
 
 function sanitize(str) {
-  if (!str) return str;
+  if (!str) return '';
   return String(str).replace(/<[^>]*>/g, '').trim();
 }
 
@@ -92,7 +86,6 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Rate limiting
   const { allowed } = rateLimit(req);
   if (!allowed) {
     return res.status(429).json({ error: 'Too many requests' });
@@ -100,7 +93,6 @@ module.exports = async function handler(req, res) {
 
   const payload = req.body || {};
 
-  // Validar google_key
   const webhookKey = process.env.GOOGLE_ADS_WEBHOOK_KEY;
   const providedKey = payload.google_key;
   if (!providedKey || !webhookKey) {
@@ -112,16 +104,14 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  // Validar payload mínimo
   const leadId = payload.lead_id;
   if (!leadId) {
     return res.status(400).json({ error: 'Missing lead_id' });
   }
 
-  // Parsear campos del lead
   const fields = parseLeadData(payload);
   const lead = {
-    lead_id_google: String(leadId),
+    lead_id: String(leadId),
     nombre: sanitize(fields.nombre),
     email: sanitize(fields.email),
     telefono: sanitize(fields.telefono),
@@ -129,37 +119,32 @@ module.exports = async function handler(req, res) {
     metros_cuadrados: sanitize(fields.metros_cuadrados),
     plazo: sanitize(fields.plazo),
     region: sanitize(fields.region),
-    campaign_id: payload.campaign_id ? String(payload.campaign_id) : null,
-    gcl_id: payload.gcl_id || null,
-    raw_payload: payload,
-    is_test: payload.is_test === true,
-    estado: 'nuevo',
+    campaign_id: payload.campaign_id ? String(payload.campaign_id) : '',
+    gcl_id: payload.gcl_id || '',
+    is_test: payload.is_test === true ? 'TRUE' : 'FALSE',
   };
 
-  const supabase = getSupabase();
-
-  // Idempotencia: verificar si ya existe
-  const { data: existing } = await supabase
-    .from('leads')
-    .select('id')
-    .eq('lead_id_google', lead.lead_id_google)
-    .maybeSingle();
-
-  if (existing) {
-    return res.status(200).json({ lead_id: leadId, result: 'ok' });
+  let sheet;
+  try {
+    sheet = await getLeadsSheet();
+  } catch (err) {
+    console.error('Error abriendo Google Sheet:', err.message);
+    return res.status(500).json({ error: 'Sheet connection error' });
   }
 
-  // Insertar en DB
-  const { error: insertError } = await supabase
-    .from('leads')
-    .insert(lead);
-
-  if (insertError) {
-    console.error('Error insertando lead:', insertError.message);
-    return res.status(500).json({ error: 'Database error' });
+  try {
+    if (await leadExists(sheet, lead.lead_id)) {
+      return res.status(200).json({ lead_id: leadId, result: 'ok', duplicate: true });
+    }
+    await sheet.addRow({
+      fecha: new Date().toISOString(),
+      ...lead,
+    });
+  } catch (err) {
+    console.error('Error escribiendo en Sheet:', err.message);
+    return res.status(500).json({ error: 'Sheet write error' });
   }
 
-  // Enviar notificación por email (no bloquea la respuesta)
   const notificationEmail = process.env.NOTIFICATION_EMAIL || 'contacto@ocampo.cl';
   const tipoLabel = lead.tipo_propiedad || 'Consulta';
   const nombreLabel = lead.nombre || 'Sin nombre';
@@ -167,11 +152,10 @@ module.exports = async function handler(req, res) {
     await sendEmail(
       notificationEmail,
       `Nuevo lead Google Ads - ${nombreLabel} - ${tipoLabel}`,
-      buildNotificationHtml(lead)
+      buildNotificationHtml({ ...lead, is_test: payload.is_test === true })
     );
   } catch (emailErr) {
     console.error('Error enviando notificación:', emailErr.message);
-    // No falla el webhook, el lead ya está guardado
   }
 
   return res.status(200).json({ lead_id: leadId, result: 'ok' });
