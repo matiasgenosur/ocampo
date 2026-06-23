@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const { getLeadsSheet, leadExists } = require('../../lib/sheets');
+const { leadExists, appendLead } = require('../../lib/sheets');
 const { sendEmail } = require('../../lib/email');
 const { rateLimit } = require('../../lib/rate-limit');
 
@@ -124,22 +124,11 @@ module.exports = async function handler(req, res) {
     is_test: payload.is_test === true ? 'TRUE' : 'FALSE',
   };
 
-  let sheet;
   try {
-    sheet = await getLeadsSheet();
-  } catch (err) {
-    console.error('Error abriendo Google Sheet:', err.message);
-    return res.status(500).json({ error: 'Sheet connection error' });
-  }
-
-  try {
-    if (await leadExists(sheet, lead.lead_id)) {
+    if (await leadExists(lead.lead_id)) {
       return res.status(200).json({ lead_id: leadId, result: 'ok', duplicate: true });
     }
-    await sheet.addRow({
-      fecha: new Date().toISOString(),
-      ...lead,
-    });
+    await appendLead({ fecha: new Date().toISOString(), ...lead });
   } catch (err) {
     console.error('Error escribiendo en Sheet:', err.message);
     return res.status(500).json({ error: 'Sheet write error' });
