@@ -18,6 +18,10 @@ module.exports = async function handler(req, res) {
   const empresaTexto = empresa ? empresa : 'No especificada';
   const fechaEnvio = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
 
+  const telefonoDigitos = String(telefono).replace(/\D/g, '');
+  const telefonoWa = telefonoDigitos.startsWith('56') ? telefonoDigitos : `56${telefonoDigitos.replace(/^0+/, '')}`;
+  const telefonoTel = `+${telefonoWa}`;
+
   const emailRicardoHtml = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1A1A1A;">
       <div style="background: #C41E3A; padding: 24px 32px;">
@@ -39,7 +43,9 @@ module.exports = async function handler(req, res) {
           </div>
         </div>
         <div style="margin-top: 24px; text-align: center;">
-          <a href="mailto:${email}" style="background: #C41E3A; color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Responder al cliente</a>
+          <a href="mailto:${email}" style="background: #C41E3A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin: 4px;">Responder al cliente</a>
+          <a href="https://wa.me/${telefonoWa}" style="background: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin: 4px;">WhatsApp</a>
+          <a href="tel:${telefonoTel}" style="background: #1A1A1A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin: 4px;">Llamar</a>
         </div>
       </div>
     </div>
